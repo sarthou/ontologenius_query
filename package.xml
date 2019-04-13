@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ontologenius_query</name>
+  <version>0.0.0</version>
+  <description>The ontologenius_query package</description>
+
+  <maintainer email="gsarthou@laas.fr">gsarthou</maintainer>
+
+  <license>BSD</license>
+
+  <!-- <url type="website">http://wiki.ros.org/ontologenius_query</url> -->
+
+  <author email="gsarthou@laas.fr">gsarthou</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>ontologenius</build_depend>
+  <build_depend>roscpp</build_depend>
+
+  <build_export_depend>ontologenius</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  
+  <exec_depend>ontologenius</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+
+</package>
