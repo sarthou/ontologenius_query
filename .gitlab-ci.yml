@@ -5,7 +5,7 @@
     - catkin_make
     - cd src
     - cp -r /builds/$GITLAB_USER_LOGIN/ontologenius_query .
-    - git clone clone https://github.com/sarthou/ontologenius.git
+    - git clone https://github.com/sarthou/ontologenius.git
     - cd ..
     - catkin_make
 
@@ -16,7 +16,7 @@
     - catkin_make
     - cd src
     - cp -r /builds/$GITLAB_USER_LOGIN/ontologenius_query .
-    - git clone clone https://github.com/sarthou/ontologenius.git
+    - git clone https://github.com/sarthou/ontologenius.git
     - git clone https://github.com/kennethreitz/requests.git
     - mkdir -p ~/ros_ws/devel/lib/python2.7/site-packages
     - export PYTHONPATH=~/ros_ws/devel/lib/python2.7/site-packages:$PYTHONPATH
