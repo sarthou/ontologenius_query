@@ -1,0 +1,5 @@
+string namespace
+string query
+---
+string[] values
+string error
