@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.5)
 project(ontologenius_query)
 
+function(add_onto_library TARGET)
+    if(NOT TARGET)
+        message(FATAL_ERROR "Expected the target name as first argument")
+    endif()
+    if(NOT ARGN)
+        message(FATAL_ERROR "Expected source file list after target name")
+    endif()
+    add_library(${TARGET} ${ARGN})
+    target_include_directories(${TARGET} PUBLIC include PRIVATE ${catkin_INCLUDE_DIRS})
+    target_link_libraries(${TARGET} PRIVATE ${catkin_LIBRARIES})
+    set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
+    target_compile_options(${TARGET} PRIVATE -Wall -Wextra)
+endfunction(add_onto_library)
+
 function(add_onto_executable TARGET)
     if(NOT TARGET)
         message(FATAL_ERROR "Expected the target name as first argument")
@@ -9,7 +23,7 @@ function(add_onto_executable TARGET)
         message(FATAL_ERROR "Expected source file list after target name")
     endif()
     add_executable(${TARGET} ${ARGN})
-    #add_dependencies(${TARGET} ${catkin_EXPORTED_TARGETS})
+    add_dependencies(${TARGET} ontologenius_gencpp ${catkin_EXPORTED_TARGETS})
     target_include_directories(${TARGET} PUBLIC include PRIVATE ${catkin_INCLUDE_DIRS})
     target_link_libraries(${TARGET} PRIVATE ${catkin_LIBRARIES})
     set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
@@ -52,7 +66,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+   INCLUDE_DIRS include
 #  LIBRARIES ontologenius_query
    CATKIN_DEPENDS ontologenius
 #  DEPENDS system_lib
@@ -65,40 +79,18 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
   ${ontoloGenius_INCLUDE_DIRS}
 )
 
-## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/ontologenius_query.cpp
-# )
+add_onto_library(ontologenius_query_analyzer_lib
+  src/VariableStorage.cpp
+  src/QueryAnalyzer.cpp
+)
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/ontologenius_query_node.cpp)
-
-## Rename C++ executable without prefix
-## The above recommended prefix causes long target names, the following renames the
-## target back to the shorter version for ease of user use
-## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
-
-## Add cmake target dependencies of the executable
-## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+add_onto_executable(ontologenius_query src/nodes/main.cpp)
+target_link_libraries(ontologenius_query PRIVATE ontologenius_query_analyzer_lib)
 
 #############
 ## Install ##
