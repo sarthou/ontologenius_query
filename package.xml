@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>ontologenius_query</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>The ontologenius_query package</description>
 
   <maintainer email="gsarthou@laas.fr">gsarthou</maintainer>
@@ -19,7 +19,7 @@
 
   <build_export_depend>ontologenius</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
-  
+
   <exec_depend>ontologenius</exec_depend>
   <exec_depend>roscpp</exec_depend>
 
