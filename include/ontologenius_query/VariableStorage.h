@@ -29,7 +29,7 @@ class VariableStorage
 {
 public:
   variables_t operator[](const std::string& name);
-  void set(const std::string& name, type_e& type, const std::vector<std::string>& values);
+  void set(const std::string& name, const type_e& type, const std::vector<std::string>& values);
 
 private:
   std::map<std::string, variables_t> variables_;

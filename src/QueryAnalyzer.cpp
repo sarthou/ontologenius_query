@@ -43,17 +43,27 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::solveSubQuery(const std::string& subquery)
   {
-    std::vector<std::string> res;
     triplet_t triplet = getTriplet(subquery);
 
     if(error_ == "")
     {
-      std::cout << "subject :" << triplet.subject.name << ":" << triplet.subject.variable << std::endl;
-      std::cout << "predicat :" << triplet.predicat.name << ":" << triplet.predicat.variable << std::endl;
-      std::cout << "object :" << triplet.object.name << ":" << triplet.object.variable << std::endl;
+      if(triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
+        return getType(triplet);
+      else if(!triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
+        return getUp(triplet);
+      else if(triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
+        return getUnionIsA(triplet);
+      else if(triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable)
+        return getFrom(triplet);
+      else if(!triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable)
+        return getOn(triplet);
+      else if(triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable)
+        return getUnion(triplet);
+      else
+        error_ = "can not resolve query : " + subquery;
     }
 
-    return res;
+    return std::vector<std::string>();
   }
 
   triplet_t QueryAnalyzer::getTriplet(const std::string& subquery)
@@ -98,6 +108,131 @@ namespace ontologenius_query
     res.name = text;
 
     return res;
+  }
+
+  std::vector<std::string> QueryAnalyzer::getType(const triplet_t& triplet)
+  {
+    std::vector<std::string> res = onto_->individuals.getType(triplet.object.name);
+    if(variables_[triplet.subject.name].setted)
+    {
+      if(variables_[triplet.subject.name].type == indiv_type)
+        res = vectorUnion(res, variables_[triplet.subject.name].values);
+      else
+        error_ = "variable '" + triplet.subject.name + "' as incompatible type";
+    }
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.subject.name, indiv_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> QueryAnalyzer::getUp(const triplet_t& triplet)
+  {
+    std::vector<std::string> res = onto_->individuals.getUp(triplet.subject.name);
+    if(variables_[triplet.object.name].setted)
+    {
+      if(variables_[triplet.object.name].type == class_type)
+        res = vectorUnion(res, variables_[triplet.object.name].values);
+      else
+        error_ = "variable '" + triplet.object.name + "' as incompatible type";
+    }
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.object.name, class_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> QueryAnalyzer::getUnionIsA(const triplet_t& triplet)
+  {
+    std::vector<std::string> res = onto_->individuals.getType(triplet.object.name);
+    if(variables_[triplet.subject.name].setted)
+    {
+      if(variables_[triplet.subject.name].type == indiv_type)
+        res = vectorUnion(res, variables_[triplet.subject.name].values);
+      else
+        error_ = "variable '" + triplet.subject.name + "' as incompatible type";
+    }
+    else
+      error_ = "variable " + triplet.subject.name + " or " + triplet.object.name + " must be setted";
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.subject.name, indiv_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
+  }
+
+
+  std::vector<std::string> QueryAnalyzer::getFrom(const triplet_t& triplet)
+  {
+    std::vector<std::string> res = onto_->individuals.getFrom(triplet.predicat.name, triplet.object.name);
+    if(variables_[triplet.subject.name].setted)
+    {
+      if(variables_[triplet.subject.name].type == indiv_type)
+        res = vectorUnion(res, variables_[triplet.subject.name].values);
+      else
+        error_ = "variable '" + triplet.subject.name + "' as incompatible type";
+    }
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.subject.name, indiv_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> QueryAnalyzer::getOn(const triplet_t& triplet)
+  {
+    std::vector<std::string> res = onto_->individuals.getOn(triplet.subject.name, triplet.predicat.name);
+    if(variables_[triplet.object.name].setted)
+    {
+      if(variables_[triplet.object.name].type == indiv_type)
+        res = vectorUnion(res, variables_[triplet.object.name].values);
+      else
+        error_ = "variable '" + triplet.object.name + "' as incompatible type";
+    }
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.object.name, indiv_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> QueryAnalyzer::getUnion(const triplet_t& triplet)
+  {
+    std::vector<std::string> res = onto_->individuals.getFrom(triplet.predicat.name, triplet.object.name);
+    if(variables_[triplet.subject.name].setted)
+    {
+      if(variables_[triplet.subject.name].type == indiv_type)
+        res = vectorUnion(res, variables_[triplet.subject.name].values);
+      else
+        error_ = "variable '" + triplet.subject.name + "' as incompatible type";
+    }
+    else
+      error_ = "variable " + triplet.subject.name + " or " + triplet.object.name + " must be setted";
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.subject.name, indiv_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
   }
 
   std::vector<std::string> QueryAnalyzer::split(const std::string& str, const std::string& delim)

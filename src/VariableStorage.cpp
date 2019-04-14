@@ -16,7 +16,7 @@ namespace ontologenius_query
     return variables_[name];
   }
 
-  void VariableStorage::set(const std::string& name, type_e& type, const std::vector<std::string>& values)
+  void VariableStorage::set(const std::string& name, const type_e& type, const std::vector<std::string>& values)
   {
     variables_t var;
     var.values = values;
