@@ -152,7 +152,25 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::getUnionIsA(const triplet_t& triplet)
   {
-    std::vector<std::string> res = onto_->individuals.getType(triplet.object.name);
+    std::vector<std::string> res;
+
+    if(variables_[triplet.object.name].setted)
+    {
+      std::set<std::string> res_set;
+      for(const auto& x : variables_[triplet.object.name].values)
+      {
+        std::vector<std::string> tmp = onto_->individuals.getType(x);
+        for(const auto& res_i : tmp)
+          res_set.insert(res_i);
+      }
+
+      for(const auto& x : res_set)
+        res.push_back(x);
+
+    }
+    else
+      error_ = "Variable " + triplet.object.name + " must be setted";
+
     if(variables_[triplet.subject.name].setted)
     {
       if(variables_[triplet.subject.name].type == indiv_type)
@@ -160,8 +178,6 @@ namespace ontologenius_query
       else
         error_ = "variable '" + triplet.subject.name + "' as incompatible type";
     }
-    else
-      error_ = "variable " + triplet.subject.name + " or " + triplet.object.name + " must be setted";
 
     if(error_ == "")
     {
@@ -241,8 +257,6 @@ namespace ontologenius_query
       else
         error_ = "variable '" + triplet.subject.name + "' as incompatible type";
     }
-    else
-      error_ = "variable " + triplet.subject.name + " or " + triplet.object.name + " must be setted";
 
     if(error_ == "")
     {
