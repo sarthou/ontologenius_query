@@ -89,8 +89,11 @@ add_onto_library(ontologenius_query_analyzer_lib
   src/QueryAnalyzer.cpp
 )
 
-add_onto_executable(ontologenius_query src/nodes/main.cpp)
+add_onto_executable(ontologenius_query src/nodes/single.cpp)
 target_link_libraries(ontologenius_query PRIVATE ontologenius_query_analyzer_lib)
+
+add_onto_executable(ontologenius_query_multi src/nodes/multi.cpp)
+target_link_libraries(ontologenius_query_multi PRIVATE ontologenius_query_analyzer_lib)
 
 #############
 ## Install ##

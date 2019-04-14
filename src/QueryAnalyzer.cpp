@@ -5,8 +5,8 @@ namespace ontologenius_query
 
   QueryAnalyzer::QueryAnalyzer(OntologiesManipulator* onto, std::string& ns)
   {
-    /*onto->add(ns);
-    onto_ = onto->get(ns);*/
+    onto->add(ns);
+    onto_ = onto->get(ns);
     error_ = "";
   }
 
@@ -18,11 +18,11 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::run(std::string& query)
   {
-    /*if(onto_ == nullptr)
+    if(onto_ == nullptr)
     {
       error_ = "can not create an ontology manipulator";
       return std::vector<std::string>();
-    }*/
+    }
 
     std::vector<std::string> sub_queries = split(query, ",");
 
