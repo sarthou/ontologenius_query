@@ -14,13 +14,8 @@ OntologyManipulator* onto_;
 bool queryService(ontologenius_query::OntologeniusQueryService::Request& req,
                   ontologenius_query::OntologeniusQueryService::Response& res)
 {
-  std::cout << "request : " << req.query << " on " << req.ns << std::endl;
-
   ontologenius_query::QueryAnalyzer analyzer(onto_);
   std::vector<std::string> results = analyzer.run(req.query);
-
-  for(auto x : results)
-    std::cout << x << std::endl;
 
   res.values = results;
   res.error = analyzer.getError();
