@@ -6,4 +6,4 @@ This package offers an abstraction to query ontologenius with queries similar to
 Be careful when using this abstraction can slow down your application. For intensive queries, we recommend using the ontoloenius API.
 
 [Release-Url]: https://sarthou.github.io/ontologenius_query/
-[Release-image]: http://img.shields.io/badge/release-v0.0.1-1eb0fc.svg
+[Release-image]: http://img.shields.io/badge/release-v0.0.2-1eb0fc.svg
