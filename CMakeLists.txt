@@ -134,11 +134,11 @@ target_link_libraries(ontologenius_query_multi PRIVATE ontologenius_query_analyz
 ## Testing ##
 #############
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ontologenius_query.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
 
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+  add_rostest_gtest(ontologenius_query_tester test/ontologenius_query.test src/tests/ontologenius_query_test.cpp)
+  target_include_directories(ontologenius_query_tester PRIVATE ${catkin_INCLUDE_DIRS})
+  target_link_libraries(ontologenius_query_tester ontoloGenius_lib ${catkin_LIBRARIES})
+
+endif()

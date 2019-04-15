@@ -82,7 +82,7 @@ namespace ontologenius_query
           case 0: res.subject = resource; break;
           case 1: res.predicat = resource; break;
           case 2: res.object = resource; break;
-          default: error_ = "invalid subqury format in : " + subquery;
+          default: error_ = "invalid subquery format in : " + subquery;
         }
         cpt++;
       }

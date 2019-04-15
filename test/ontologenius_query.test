@@ -1,0 +1,14 @@
+<launch>
+  <include file="$(find ontologenius)/launch/ontologenius.launch">
+    <arg name="intern_file" default="none"/>
+    <arg name="files" default="
+    $(find ontologenius)/files/attribute.owl
+    $(find ontologenius)/files/positionProperty.owl
+    $(find ontologenius_query)/files/testIndividuals.owl
+    "/>
+  </include>
+  <node name="ontologenius_query" pkg="ontologenius_query" type="ontologenius_query" output="screen"> </node>
+
+  <arg name='TESTDURATION' value='10' />
+  <test pkg="ontologenius_query" type="ontologenius_query_tester" test-name="ontologenius_query_tester" time-limit="$(arg TESTDURATION)" retry="0" />
+</launch>
