@@ -9,6 +9,6 @@
   </include>
   <node name="ontologenius_query" pkg="ontologenius_query" type="ontologenius_query" output="screen"> </node>
 
-  <arg name='TESTDURATION' value='10' />
+  <arg name='TESTDURATION' value='60' />
   <test pkg="ontologenius_query" type="ontologenius_query_tester" test-name="ontologenius_query_tester" time-limit="$(arg TESTDURATION)" retry="0" />
 </launch>

@@ -76,6 +76,9 @@ int main(int argc, char** argv)
 
   onto.close();
 
+  ros::Rate wait(1);
+  wait.sleep();
+
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 
