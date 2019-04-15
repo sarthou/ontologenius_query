@@ -49,6 +49,8 @@ private:
    std::vector<std::string> getFrom(const triplet_t& triplet);
    std::vector<std::string> getOn(const triplet_t& triplet);
    std::vector<std::string> getUnion(const triplet_t& triplet);
+   void insertInheritance(const triplet_t& triplet);
+   void insertTriplet(const triplet_t& triplet);
 
    std::vector<std::string> split(const std::string& str, const std::string& delim);
    std::vector<std::string> vectorUnion(const std::vector<std::string>& vect1, const std::vector<std::string>& vect2);

@@ -32,6 +32,7 @@ TEST(dynamic_tests, insert)
 {
   bool res_bool = true;
   std::vector<std::string> res;
+  ros::Rate wait(1);
 
   EXPECT_TRUE(call("?obj isA box", res));
   res_bool = ((res.size() == 3) &&
@@ -40,7 +41,6 @@ TEST(dynamic_tests, insert)
               (find(res.begin(), res.end(), "big_box") != res.end()));
   EXPECT_TRUE(res_bool);
 
-  EXPECT_FALSE(call("obj isA box", res));
   EXPECT_FALSE(call("?obj isA box blue", res));
 
   EXPECT_TRUE(call("?obj isA cube, ?obj isA red", res));
@@ -63,6 +63,23 @@ TEST(dynamic_tests, insert)
   EXPECT_TRUE(call("blueCube isOn ?cube", res));
   res_bool = ((res.size() == 1) &&
               (find(res.begin(), res.end(), "redCube") != res.end()));
+  EXPECT_TRUE(res_bool);
+
+  EXPECT_TRUE(call("new_box isA box", res));
+  wait.sleep();
+  EXPECT_TRUE(call("?obj isA box", res));
+  res_bool = ((res.size() == 4) &&
+              (find(res.begin(), res.end(), "mini_box") != res.end()) &&
+              (find(res.begin(), res.end(), "little_box") != res.end()) &&
+              (find(res.begin(), res.end(), "new_box") != res.end()) &&
+              (find(res.begin(), res.end(), "big_box") != res.end()));
+  EXPECT_TRUE(res_bool);
+
+  EXPECT_TRUE(call("blueCube hasColor blue_color", res));
+  wait.sleep();
+  EXPECT_TRUE(call("?obj hasColor blue_color", res));
+  res_bool = ((res.size() == 1) &&
+              (find(res.begin(), res.end(), "blueCube") != res.end()));
   EXPECT_TRUE(res_bool);
 }
 

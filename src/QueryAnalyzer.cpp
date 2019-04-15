@@ -59,6 +59,10 @@ namespace ontologenius_query
         return getOn(triplet);
       else if(triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable)
         return getUnion(triplet);
+      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
+        insertInheritance(triplet);
+      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name != "isA"))
+        insertTriplet(triplet);
       else
         error_ = "can not resolve query : " + subquery;
     }
@@ -188,7 +192,6 @@ namespace ontologenius_query
       return std::vector<std::string>();
   }
 
-
   std::vector<std::string> QueryAnalyzer::getFrom(const triplet_t& triplet)
   {
     std::vector<std::string> res = onto_->individuals.getFrom(triplet.predicat.name, triplet.object.name);
@@ -265,6 +268,16 @@ namespace ontologenius_query
     }
     else
       return std::vector<std::string>();
+  }
+
+  void QueryAnalyzer::insertInheritance(const triplet_t& triplet)
+  {
+    onto_->feeder.addInheritage(triplet.subject.name, triplet.object.name);
+  }
+
+  void QueryAnalyzer::insertTriplet(const triplet_t& triplet)
+  {
+    onto_->feeder.addProperty(triplet.subject.name, triplet.predicat.name, triplet.object.name);
   }
 
   std::vector<std::string> QueryAnalyzer::split(const std::string& str, const std::string& delim)
