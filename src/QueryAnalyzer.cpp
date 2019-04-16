@@ -134,7 +134,7 @@ namespace ontologenius_query
       res = onto_->individuals.getType(triplet.object.name);
     else
     {
-      std::vector<std::string> objects = onto_->individuals.findRegex(triplet.object.name);
+      std::vector<std::string> objects = onto_->classes.findRegex(triplet.object.name);
       std::set<std::string> res_set;
       for(const auto& x : objects)
       {
