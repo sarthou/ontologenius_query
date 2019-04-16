@@ -47,7 +47,9 @@ namespace ontologenius_query
 
     if(error_ == "")
     {
-      if(triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
+      if(triplet.predicat.regex)
+        error_ = "predicat can not be a regex in: " + subquery;
+      else if(triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
         return getType(triplet);
       else if(!triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
         return getUp(triplet);
@@ -59,9 +61,9 @@ namespace ontologenius_query
         return getOn(triplet);
       else if(triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable)
         return getUnion(triplet);
-      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
+      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA") && !triplet.object.regex && !triplet.subject.regex)
         insertInheritance(triplet);
-      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name != "isA"))
+      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name != "isA") && !triplet.object.regex && !triplet.subject.regex)
         insertTriplet(triplet);
       else
         error_ = "can not resolve query : " + subquery;
@@ -101,11 +103,22 @@ namespace ontologenius_query
     removeUselessSpace(text);
 
     resource_t res;
+    res.regex = false;
 
     if(text[0] == '?')
     {
       res.variable = true;
       text = text.substr(1);
+    }
+    else if(text.find("regex(") == 0)
+    {
+      if(text[text.size() - 1] == ')')
+      {
+        res.regex = true;
+        text = text.substr(6, text.size() - 7);
+      }
+      else
+        error_ = "invalid regex : " + text;
     }
     else
       res.variable = false;
@@ -116,7 +129,24 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::getType(const triplet_t& triplet)
   {
-    std::vector<std::string> res = onto_->individuals.getType(triplet.object.name);
+    std::vector<std::string> res;
+    if(triplet.object.regex == false)
+      res = onto_->individuals.getType(triplet.object.name);
+    else
+    {
+      std::vector<std::string> objects = onto_->individuals.findRegex(triplet.object.name);
+      std::set<std::string> res_set;
+      for(const auto& x : objects)
+      {
+        std::vector<std::string> tmp = onto_->individuals.getType(x);
+        for(const auto& res_i : tmp)
+          res_set.insert(res_i);
+      }
+
+      for(const auto& x : res_set)
+        res.push_back(x);
+    }
+
     if(variables_[triplet.subject.name].setted)
     {
       if(variables_[triplet.subject.name].type == indiv_type)
@@ -136,7 +166,24 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::getUp(const triplet_t& triplet)
   {
-    std::vector<std::string> res = onto_->individuals.getUp(triplet.subject.name);
+    std::vector<std::string> res;
+    if(triplet.subject.regex == false)
+      res = onto_->individuals.getUp(triplet.subject.name);
+    else
+    {
+      std::vector<std::string> subjects = onto_->individuals.findRegex(triplet.subject.name);
+      std::set<std::string> res_set;
+      for(const auto& x : subjects)
+      {
+        std::vector<std::string> tmp = onto_->individuals.getUp(x);
+        for(const auto& res_i : tmp)
+          res_set.insert(res_i);
+      }
+
+      for(const auto& x : res_set)
+        res.push_back(x);
+    }
+
     if(variables_[triplet.object.name].setted)
     {
       if(variables_[triplet.object.name].type == class_type)
@@ -170,7 +217,6 @@ namespace ontologenius_query
 
       for(const auto& x : res_set)
         res.push_back(x);
-
     }
     else
       error_ = "Variable " + triplet.object.name + " must be setted";
@@ -194,7 +240,24 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::getFrom(const triplet_t& triplet)
   {
-    std::vector<std::string> res = onto_->individuals.getFrom(triplet.predicat.name, triplet.object.name);
+    std::vector<std::string> res;
+    if(triplet.object.regex == false)
+      res = onto_->individuals.getFrom(triplet.predicat.name, triplet.object.name);
+    else
+    {
+      std::vector<std::string> objects = onto_->individuals.findRegex(triplet.object.name);
+      std::set<std::string> res_set;
+      for(const auto& x : objects)
+      {
+        std::vector<std::string> tmp = onto_->individuals.getFrom(triplet.predicat.name, x);
+        for(const auto& res_i : tmp)
+          res_set.insert(res_i);
+      }
+
+      for(const auto& x : res_set)
+        res.push_back(x);
+    }
+
     if(variables_[triplet.subject.name].setted)
     {
       if(variables_[triplet.subject.name].type == indiv_type)
@@ -214,7 +277,24 @@ namespace ontologenius_query
 
   std::vector<std::string> QueryAnalyzer::getOn(const triplet_t& triplet)
   {
-    std::vector<std::string> res = onto_->individuals.getOn(triplet.subject.name, triplet.predicat.name);
+    std::vector<std::string> res;
+    if(triplet.subject.regex == false)
+      res = onto_->individuals.getOn(triplet.subject.name, triplet.predicat.name);
+    else
+    {
+      std::vector<std::string> subjects = onto_->individuals.findRegex(triplet.subject.name);
+      std::set<std::string> res_set;
+      for(const auto& x : subjects)
+      {
+        std::vector<std::string> tmp = onto_->individuals.getOn(x, triplet.predicat.name);
+        for(const auto& res_i : tmp)
+          res_set.insert(res_i);
+      }
+
+      for(const auto& x : res_set)
+        res.push_back(x);
+    }
+
     if(variables_[triplet.object.name].setted)
     {
       if(variables_[triplet.object.name].type == indiv_type)

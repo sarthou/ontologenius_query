@@ -16,6 +16,7 @@ struct resource_t
 {
   std::string name;
   bool variable;
+  bool regex;
 };
 
 struct triplet_t
