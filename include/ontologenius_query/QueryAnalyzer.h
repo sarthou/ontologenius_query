@@ -46,6 +46,8 @@ private:
 
    std::vector<std::string> getType(const triplet_t& triplet);
    std::vector<std::string> getUp(const triplet_t& triplet);
+   std::vector<std::string> find(const triplet_t& triplet);
+   std::vector<std::string> getName(const triplet_t& triplet);
    std::vector<std::string> getUnionIsA(const triplet_t& triplet);
    std::vector<std::string> getFrom(const triplet_t& triplet);
    std::vector<std::string> getOn(const triplet_t& triplet);

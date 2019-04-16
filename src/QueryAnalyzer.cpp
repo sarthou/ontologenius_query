@@ -49,21 +49,29 @@ namespace ontologenius_query
     {
       if(triplet.predicat.regex)
         error_ = "predicat can not be a regex in: " + subquery;
-      else if(triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
+      else if(triplet.predicat.variable)
+        error_ = "predicat can not be a variable in: " + subquery;
+      else if(triplet.subject.variable && !triplet.object.variable && (triplet.predicat.name == "isA"))
         return getType(triplet);
-      else if(!triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
+      else if(!triplet.subject.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
         return getUp(triplet);
-      else if(triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
+      else if(triplet.subject.variable && triplet.object.variable && (triplet.predicat.name == "isA"))
         return getUnionIsA(triplet);
-      else if(triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable)
+      else if(triplet.subject.variable && !triplet.object.variable && (triplet.predicat.name == "hasName"))
+        return find(triplet);
+      else if(!triplet.subject.variable && triplet.object.variable && (triplet.predicat.name == "hasName"))
+        return getName(triplet);
+      else if(triplet.subject.variable && triplet.object.variable && (triplet.predicat.name == "hasName"))
+        error_ = "no variable in: " + subquery;
+      else if(triplet.subject.variable && !triplet.object.variable)
         return getFrom(triplet);
-      else if(!triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable)
+      else if(!triplet.subject.variable && triplet.object.variable)
         return getOn(triplet);
-      else if(triplet.subject.variable && !triplet.predicat.variable && triplet.object.variable)
+      else if(triplet.subject.variable && triplet.object.variable)
         return getUnion(triplet);
-      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name == "isA") && !triplet.object.regex && !triplet.subject.regex)
+      else if(!triplet.subject.variable && !triplet.object.variable && (triplet.predicat.name == "isA") && !triplet.object.regex && !triplet.subject.regex)
         insertInheritance(triplet);
-      else if(!triplet.subject.variable && !triplet.predicat.variable && !triplet.object.variable && (triplet.predicat.name != "isA") && !triplet.object.regex && !triplet.subject.regex)
+      else if(!triplet.subject.variable && !triplet.object.variable && (triplet.predicat.name != "isA") && !triplet.object.regex && !triplet.subject.regex)
         insertTriplet(triplet);
       else
         error_ = "can not resolve query : " + subquery;
@@ -236,6 +244,37 @@ namespace ontologenius_query
     }
     else
       return std::vector<std::string>();
+  }
+
+  std::vector<std::string> QueryAnalyzer::find(const triplet_t& triplet)
+  {
+    std::vector<std::string> res;
+    if(triplet.object.regex == false)
+      res = onto_->individuals.find(triplet.object.name);
+    else
+      res = onto_->individuals.findRegex(triplet.object.name);
+
+    if(variables_[triplet.subject.name].setted)
+    {
+      if(variables_[triplet.subject.name].type == indiv_type)
+        res = vectorUnion(res, variables_[triplet.subject.name].values);
+      else
+        error_ = "variable '" + triplet.subject.name + "' as incompatible type";
+    }
+
+    if(error_ == "")
+    {
+      variables_.set(triplet.subject.name, indiv_type, res);
+      return res;
+    }
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> QueryAnalyzer::getName(const triplet_t& triplet)
+  {
+    error_ = "invalid query";
+    return std::vector<std::string>();
   }
 
   std::vector<std::string> QueryAnalyzer::getFrom(const triplet_t& triplet)
