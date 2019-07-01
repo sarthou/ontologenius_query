@@ -274,6 +274,7 @@ namespace ontologenius_query
   std::vector<std::string> QueryAnalyzer::getName(const triplet_t& triplet)
   {
     error_ = "invalid query";
+    (void)triplet;
     return std::vector<std::string>();
   }
 
