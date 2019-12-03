@@ -1,0 +1,290 @@
+<?xml version="1.0"?> 
+<rdf:RDF xmlns="ontologenius#" 
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+     xmlns:owl="http://www.w3.org/2002/07/owl#" 
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"> 
+    <owl:Ontology rdf:about="ontologenius"/>
+
+
+
+    <!--
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+
+
+    <!-- ontologenius#Color -->
+
+    <owl:Class rdf:about="ontologenius#Color">
+    </owl:Class>
+
+
+
+    <!-- ontologenius#Object -->
+
+    <owl:Class rdf:about="ontologenius#Object">
+    </owl:Class>
+
+
+
+    <!-- ontologenius#Room -->
+
+    <owl:Class rdf:about="ontologenius#Room">
+    </owl:Class>
+
+
+
+    <!-- ontologenius#Fan -->
+
+    <owl:Class rdf:about="ontologenius#Fan">
+        <rdfs:subClassOf rdf:resource="ontologenius#Furniture"/>
+    </owl:Class>
+
+
+
+    <!-- ontologenius#Furniture -->
+
+    <owl:Class rdf:about="ontologenius#Furniture">
+        <rdfs:subClassOf rdf:resource="ontologenius#Object"/>
+    </owl:Class>
+
+
+
+    <!-- ontologenius#PostIt -->
+
+    <owl:Class rdf:about="ontologenius#PostIt">
+        <rdfs:subClassOf rdf:resource="ontologenius#Object"/>
+    </owl:Class>
+
+
+
+    <!-- ontologenius#Table -->
+
+    <owl:Class rdf:about="ontologenius#Table">
+        <rdfs:subClassOf rdf:resource="ontologenius#Furniture"/>
+    </owl:Class>
+
+
+
+    <!--
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+
+
+    <!-- ontologenius#SpatialProperties -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#SpatialProperties">
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#VisualProperty -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#VisualProperty">
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#atLeftOf -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#atLeftOf">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#SpatialProperties"/>
+        <owl:inverseOf rdf:resource="ontologenius#atRightOf"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:range rdf:resource="ontologenius#Object"/>
+        <rdfs:domain rdf:resource="ontologenius#Object"/>
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#atRightOf -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#atRightOf">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#SpatialProperties"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:range rdf:resource="ontologenius#Object"/>
+        <rdfs:domain rdf:resource="ontologenius#Object"/>
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#hasColor -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#hasColor">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#VisualProperty"/>
+        <rdfs:range rdf:resource="ontologenius#Color"/>
+        <rdfs:domain rdf:resource="ontologenius#Object"/>
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#hasIn -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#hasIn">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#SpatialProperties"/>
+        <owl:inverseOf rdf:resource="ontologenius#isIn"/>
+        <rdfs:range rdf:resource="ontologenius#Object"/>
+        <rdfs:domain rdf:resource="ontologenius#Room"/>
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#hasOn -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#hasOn">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#SpatialProperties"/>
+        <owl:inverseOf rdf:resource="ontologenius#isOn"/>
+        <rdfs:range rdf:resource="ontologenius#PostIt"/>
+        <rdfs:domain rdf:resource="ontologenius#Furniture"/>
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#isIn -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#isIn">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#SpatialProperties"/>
+        <rdfs:range rdf:resource="ontologenius#Room"/>
+        <rdfs:domain rdf:resource="ontologenius#Object"/>
+    </owl:ObjectProperty>
+
+
+
+    <!-- ontologenius#isOn -->
+
+    <owl:ObjectProperty rdf:about="ontologenius#isOn">
+        <rdfs:subPropertyOf rdf:resource="ontologenius#SpatialProperties"/>
+        <rdfs:range rdf:resource="ontologenius#Furniture"/>
+        <rdfs:domain rdf:resource="ontologenius#PostIt"/>
+    </owl:ObjectProperty>
+
+
+
+    <!--
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+
+
+    <!--
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+
+
+    <!-- ontologenius#Bedroom -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Bedroom">
+        <rdf:type rdf:resource="ontologenius#Room"/>
+        <ontologenius:hasIn rdf:resource="ontologenius#Pasta"/>
+        <ontologenius:hasIn rdf:resource="ontologenius#Salmon"/>
+        <ontologenius:hasIn rdf:resource="ontologenius#Table1"/>
+        <ontologenius:hasIn rdf:resource="ontologenius#Table2"/>
+        <ontologenius:hasIn rdf:resource="ontologenius#WhiteFan"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#Blue -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Blue">
+        <rdf:type rdf:resource="ontologenius#Color"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#Pasta -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Pasta">
+        <rdf:type rdf:resource="ontologenius#PostIt"/>
+        <ontologenius:hasColor rdf:resource="ontologenius#Blue"/>
+        <ontologenius:isOn rdf:resource="ontologenius#Table2"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#Red -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Red">
+        <rdf:type rdf:resource="ontologenius#Color"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#Salmon -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Salmon">
+        <rdf:type rdf:resource="ontologenius#PostIt"/>
+        <ontologenius:hasColor rdf:resource="ontologenius#Red"/>
+        <ontologenius:isOn rdf:resource="ontologenius#Table1"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#Table1 -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Table1">
+        <rdf:type rdf:resource="ontologenius#Table"/>
+        <ontologenius:atLeftOf rdf:resource="ontologenius#WhiteFan"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#Table2 -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#Table2">
+        <rdf:type rdf:resource="ontologenius#Table"/>
+        <ontologenius:atRightOf rdf:resource="ontologenius#WhiteFan"/>
+    </owl:NamedIndividual>
+
+
+
+    <!-- ontologenius#WhiteFan -->
+
+    <owl:NamedIndividual rdf:about="ontologenius#WhiteFan">
+        <rdf:type rdf:resource="ontologenius#Fan"/>
+        <ontologenius:isIn rdf:resource="ontologenius#Bedroom"/>
+    </owl:NamedIndividual>
+
+
+
+    <!--
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+
+
+</rdf:RDF> 
+
+
+
+<!-- Generated by the ontologenius https://sarthou.github.io/ontologenius/ -->
+

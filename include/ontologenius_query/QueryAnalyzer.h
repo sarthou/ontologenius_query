@@ -5,26 +5,13 @@
 #include <vector>
 
 #include "ontologenius_query/VariableStorage.h"
+#include "ontologenius_query/ressource.h"
 
 #include "ontoloGenius/utility/OntologiesManipulator.h"
 #include "ontoloGenius/utility/OntologyManipulator.h"
 
 namespace ontologenius_query
 {
-
-struct resource_t
-{
-  std::string name;
-  bool variable;
-  bool regex;
-};
-
-struct triplet_t
-{
-  resource_t subject;
-  resource_t predicat;
-  resource_t object;
-};
 
 class QueryAnalyzer
 {

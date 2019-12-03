@@ -5,7 +5,10 @@
 #include "ros/ros.h"
 
 #include "ontologenius_query/OntologeniusQueryService.h"
+#include "ontologenius_query/OntologeniusQueryFullService.h"
+
 #include "ontologenius_query/QueryAnalyzer.h"
+#include "ontologenius_query/full/FullAnalyser.h"
 
 #include "ontoloGenius/utility/OntologyManipulator.h"
 
@@ -23,6 +26,28 @@ bool queryService(ontologenius_query::OntologeniusQueryService::Request& req,
   return true;
 }
 
+bool fullQueryService(ontologenius_query::OntologeniusQueryFullService::Request& req,
+                      ontologenius_query::OntologeniusQueryFullService::Response& res)
+{
+  ontologenius_query::FullAnalyser analyzer(onto_);
+  std::vector<std::map<std::string, std::string>> results = analyzer.run(req.query);
+
+  for(auto result : results)
+  {
+    ontologenius_query::OntologeniusQueryResponse tmp;
+    for(auto r : result)
+    {
+      tmp.names.push_back(r.first);
+      tmp.values.push_back(r.second);
+    }
+    res.results.push_back(tmp);
+  }
+
+  res.error = analyzer.getError();
+
+  return true;
+}
+
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "ontologenius_query");
@@ -32,6 +57,7 @@ int main(int argc, char** argv)
   onto_ = &onto;
 
   ros::ServiceServer service = n.advertiseService("ontologenius_query/query", queryService);
+  ros::ServiceServer full_service = n.advertiseService("ontologenius_query/fullQuery", fullQueryService);
 
   ros::spin();
 

@@ -46,9 +46,15 @@ find_package(ontologenius 0.2.1 REQUIRED)
 ## Declare ROS messages, services and actions ##
 ################################################
 
+add_message_files(
+  FILES
+  OntologeniusQueryResponse.msg
+)
+
 add_service_files(
  FILES
  OntologeniusQueryService.srv
+ OntologeniusQueryFullService.srv
 )
 
 generate_messages(
@@ -87,6 +93,7 @@ include_directories(
 add_onto_library(ontologenius_query_analyzer_lib
   src/VariableStorage.cpp
   src/QueryAnalyzer.cpp
+  src/full/FullAnalyser.cpp
 )
 
 add_onto_executable(ontologenius_query src/nodes/single.cpp)

@@ -1,0 +1,5 @@
+string ns
+string query
+---
+OntologeniusQueryResponse[] results
+string error
