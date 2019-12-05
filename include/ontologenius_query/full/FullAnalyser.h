@@ -1,8 +1,8 @@
 #ifndef ONTOLOGENIUSQUERY_FULLANALYSER_H
 #define ONTOLOGENIUSQUERY_FULLANALYSER_H
 
-#include "ontoloGenius/utility/OntologiesManipulator.h"
-#include "ontoloGenius/utility/OntologyManipulator.h"
+#include "ontologenius/OntologiesManipulator.h"
+#include "ontologenius/OntologyManipulator.h"
 
 #include "ontologenius_query/ressource.h"
 

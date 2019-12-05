@@ -40,7 +40,7 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   message_generation
 )
-find_package(ontologenius 0.2.1 REQUIRED)
+find_package(ontologenius 0.3.0 REQUIRED)
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -87,7 +87,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${ontoloGenius_INCLUDE_DIRS}
+  ${ontologenius_INCLUDE_DIRS}
 )
 
 add_onto_library(ontologenius_query_analyzer_lib
@@ -103,41 +103,6 @@ add_onto_executable(ontologenius_query_multi src/nodes/multi.cpp)
 target_link_libraries(ontologenius_query_multi PRIVATE ontologenius_query_analyzer_lib)
 
 #############
-## Install ##
-#############
-
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark executables and/or libraries for installation
-# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
-
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
-
-#############
 ## Testing ##
 #############
 
@@ -146,6 +111,6 @@ if(CATKIN_ENABLE_TESTING)
 
   add_rostest_gtest(ontologenius_query_tester test/ontologenius_query.test src/tests/ontologenius_query_test.cpp)
   target_include_directories(ontologenius_query_tester PRIVATE ${catkin_INCLUDE_DIRS})
-  target_link_libraries(ontologenius_query_tester ontoloGenius_lib ${catkin_LIBRARIES})
+  target_link_libraries(ontologenius_query_tester ontologenius_lib ${catkin_LIBRARIES})
 
 endif()

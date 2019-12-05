@@ -10,7 +10,7 @@
 #include "ontologenius_query/QueryAnalyzer.h"
 #include "ontologenius_query/full/FullAnalyser.h"
 
-#include "ontoloGenius/utility/OntologiesManipulator.h"
+#include "ontologenius/OntologiesManipulator.h"
 
 OntologiesManipulator* onto_;
 

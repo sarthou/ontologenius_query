@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "ontoloGenius/utility/OntologyManipulator.h"
+#include "ontologenius/OntologyManipulator.h"
 
 #include "ontologenius_query/OntologeniusQueryService.h"
 

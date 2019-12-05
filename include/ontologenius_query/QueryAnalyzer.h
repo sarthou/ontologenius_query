@@ -7,8 +7,8 @@
 #include "ontologenius_query/VariableStorage.h"
 #include "ontologenius_query/ressource.h"
 
-#include "ontoloGenius/utility/OntologiesManipulator.h"
-#include "ontoloGenius/utility/OntologyManipulator.h"
+#include "ontologenius/OntologiesManipulator.h"
+#include "ontologenius/OntologyManipulator.h"
 
 namespace ontologenius_query
 {
