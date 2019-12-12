@@ -30,6 +30,8 @@ private:
    std::vector<std::string> getFrom(const triplet_t& triplet, const std::string& selector = "");
    std::vector<std::string> getUp(const triplet_t& triplet, const std::string& selector = "");
    std::vector<std::string> getType(const triplet_t& triplet, const std::string& selector = "");
+   std::vector<std::string> find(const triplet_t& triplet, const std::string& selector = "");
+   std::vector<std::string> getName(const triplet_t& triplet, const std::string& selector = "");
 
    triplet_t getTriplet(const std::string& subquery);
    resource_t getResource(const std::string& resource);

@@ -124,6 +124,42 @@ namespace ontologenius_query
       else
         error_ = "can not resolve query : " + toString(triplet);
     }
+    else if(triplet.subject.variable && !triplet.object.variable && (triplet.predicat.name == "hasLabel"))
+    {
+      var_name = triplet.subject.name;
+      if(accu.find(var_name) != accu.end())
+        values = find(triplet, accu.at(var_name));
+      else
+        values = find(triplet);
+    }
+    else if(!triplet.subject.variable && triplet.object.variable && (triplet.predicat.name == "hasLabel"))
+    {
+      var_name = triplet.object.name;
+      if(accu.find(var_name) != accu.end())
+        values = getName(triplet, accu.at(var_name));
+      else
+        values = getName(triplet);
+    }
+    else if(triplet.subject.variable && triplet.object.variable && (triplet.predicat.name == "hasLabel"))
+    {
+      var_name = triplet.subject.name;
+      if(accu.find(var_name) != accu.end())
+      {
+        triplet.subject.name = accu.at(triplet.subject.name);
+        var_name = triplet.object.name;
+        if(accu.find(var_name) != accu.end())
+          values = getName(triplet, accu.at(var_name));
+        else
+          values = getName(triplet);
+      }
+      else if(accu.find(triplet.object.name) != accu.end())
+      {
+        triplet.object.name = accu.at(triplet.object.name);
+        values = find(triplet);
+      }
+      else
+        error_ = "can not resolve query : " + toString(triplet);
+    }
     else if(triplet.subject.variable && !triplet.object.variable)
     {
       var_name = triplet.subject.name;
@@ -199,6 +235,28 @@ namespace ontologenius_query
   std::vector<std::string> FullAnalyser::getType(const triplet_t& triplet, const std::string& selector)
   {
     std::vector<std::string> res = onto_->individuals.getType(triplet.object.name);
+    if(selector == "")
+      return res;
+    else if(std::find(res.begin(), res.end(), selector) != res.end())
+      return std::vector<std::string>(1, selector);
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> FullAnalyser::find(const triplet_t& triplet, const std::string& selector)
+  {
+    std::vector<std::string> res = onto_->individuals.find(triplet.object.name);
+    if(selector == "")
+      return res;
+    else if(std::find(res.begin(), res.end(), selector) != res.end())
+      return std::vector<std::string>(1, selector);
+    else
+      return std::vector<std::string>();
+  }
+
+  std::vector<std::string> FullAnalyser::getName(const triplet_t& triplet, const std::string& selector)
+  {
+    std::vector<std::string> res = onto_->individuals.getNames(triplet.subject.name);
     if(selector == "")
       return res;
     else if(std::find(res.begin(), res.end(), selector) != res.end())
