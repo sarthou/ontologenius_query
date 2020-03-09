@@ -40,7 +40,7 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   message_generation
 )
-find_package(ontologenius 0.3.0 REQUIRED)
+find_package(ontologenius 0.2.5 REQUIRED)
 
 ################################################
 ## Declare ROS messages, services and actions ##
