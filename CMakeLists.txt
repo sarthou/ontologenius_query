@@ -110,6 +110,7 @@ if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
 
   add_rostest_gtest(ontologenius_query_tester test/ontologenius_query.test src/tests/ontologenius_query_test.cpp)
+  set_target_properties(ontologenius_query_tester PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
   target_include_directories(ontologenius_query_tester PRIVATE ${catkin_INCLUDE_DIRS})
   target_link_libraries(ontologenius_query_tester ontologenius_lib ${catkin_LIBRARIES})
 
